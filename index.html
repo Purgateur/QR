@@ -14,9 +14,6 @@
         function showPosition(position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-            var apiKey = 'YOUR_API_KEY';  // Remplacez par votre clé API si nécessaire pour un service de géocodage
-
-            // Utiliser un service de géocodage pour obtenir le nom de la ville à partir des coordonnées
             var url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=fr`;
 
             fetch(url)
@@ -58,5 +55,3 @@
     <p>Obtention de la localisation et redirection en cours...</p>
 </body>
 </html>
-
-
