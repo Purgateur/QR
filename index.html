@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirection par Localisation</title>
+    <script>
+        function getLocationAndRedirect() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("La géolocalisation n'est pas supportée par ce navigateur.");
+            }
+        }
+
+        function showPosition(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var apiKey = 'YOUR_API_KEY';  // Remplacez par votre clé API si nécessaire pour un service de géocodage
+
+            // Utiliser un service de géocodage pour obtenir le nom de la ville à partir des coordonnées
+            var url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=fr`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var city = data.city;
+                    if (city) {
+                        var redirectUrl = `https://messes.info/horaires/${city}%20toutecelebration`;
+                        window.location.href = redirectUrl;
+                    } else {
+                        alert("Impossible de déterminer la ville.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching geocoding data: ', error);
+                    alert("Erreur lors de la récupération des données de géocodage.");
+                });
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("L'utilisateur a refusé la demande de géolocalisation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Les informations de localisation sont indisponibles.");
+                    break;
+                case error.TIMEOUT:
+                    alert("La demande de localisation a expiré.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("Une erreur inconnue est survenue.");
+                    break;
+            }
+        }
+    </script>
+</head>
+<body onload="getLocationAndRedirect()">
+    <p>Obtention de la localisation et redirection en cours...</p>
+</body>
+</html>
+
+
